@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Háztartási Menedzser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Háztartás</h2>
+                <button class="theme-toggle" id="themeToggle" aria-label="Téma váltás">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li>
+                    <button class="nav-item active" data-section="dashboard">
+                        <span class="nav-icon">🏠</span>
+                        Dashboard
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item" data-section="shopping">
+                        <span class="nav-icon">🛒</span>
+                        Bevásárlólista
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item" data-section="recipes">
+                        <span class="nav-icon">📖</span>
+                        Receptek
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item" data-section="todos">
+                        <span class="nav-icon">✅</span>
+                        Teendők
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h1>Dashboard</h1>
+                    <p>Üdvözöljük a háztartási menedzserben!</p>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card" data-nav="shopping">
+                        <div class="card-icon">🛒</div>
+                        <h3>Bevásárlólista</h3>
+                        <p class="card-stats" id="shoppingStats">0 termék</p>
+                        <button class="btn btn--primary btn--sm">Megnyitás</button>
+                    </div>
+                    <div class="dashboard-card" data-nav="recipes">
+                        <div class="card-icon">📖</div>
+                        <h3>Receptek</h3>
+                        <p class="card-stats" id="recipeStats">0 recept</p>
+                        <button class="btn btn--primary btn--sm">Megnyitás</button>
+                    </div>
+                    <div class="dashboard-card" data-nav="todos">
+                        <div class="card-icon">✅</div>
+                        <h3>Teendők</h3>
+                        <p class="card-stats" id="todoStats">0 feladat</p>
+                        <button class="btn btn--primary btn--sm">Megnyitás</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shopping List Section -->
+            <section id="shopping" class="content-section">
+                <div class="section-header">
+                    <h1>Bevásárlólista</h1>
+                    <div class="section-actions">
+                        <button class="btn btn--outline btn--sm" id="exportShopping">Exportálás</button>
+                        <button class="btn btn--secondary btn--sm" id="clearShopping">Összes törlése</button>
+                        <button class="btn btn--primary" id="addShoppingItem">+ Hozzáadás</button>
+                    </div>
+                </div>
+                <div class="shopping-content">
+                    <div class="shopping-filters">
+                        <select class="form-control" id="shoppingCategoryFilter">
+                            <option value="">Minden kategória</option>
+                            <option value="Élelmiszer">Élelmiszer</option>
+                            <option value="Háztartás">Háztartás</option>
+                            <option value="Egyéb">Egyéb</option>
+                        </select>
+                    </div>
+                    <div class="shopping-list" id="shoppingList">
+                        <div class="empty-state">
+                            <div class="empty-icon">🛒</div>
+                            <h3>Üres a bevásárlólista</h3>
+                            <p>Kezdj el hozzáadni termékeket!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recipes Section -->
+            <section id="recipes" class="content-section">
+                <div class="section-header">
+                    <h1>Receptek</h1>
+                    <div class="section-actions">
+                        <input type="text" class="form-control" id="recipeSearch" placeholder="Receptek keresése...">
+                        <button class="btn btn--primary" id="addRecipe">+ Hozzáadás</button>
+                    </div>
+                </div>
+                <div class="recipes-content">
+                    <div class="recipes-grid" id="recipesList">
+                        <div class="empty-state">
+                            <div class="empty-icon">📖</div>
+                            <h3>Nincsenek receptek</h3>
+                            <p>Kezdj el hozzáadni recepteket!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Todos Section -->
+            <section id="todos" class="content-section">
+                <div class="section-header">
+                    <h1>Teendők</h1>
+                    <div class="section-actions">
+                        <select class="form-control" id="todoPriorityFilter">
+                            <option value="">Minden prioritás</option>
+                            <option value="Alacsony">Alacsony</option>
+                            <option value="Közepes">Közepes</option>
+                            <option value="Magas">Magas</option>
+                        </select>
+                        <button class="btn btn--primary" id="addTodo">+ Hozzáadás</button>
+                    </div>
+                </div>
+                <div class="todos-content">
+                    <div class="todos-list" id="todosList">
+                        <div class="empty-state">
+                            <div class="empty-icon">✅</div>
+                            <h3>Nincsenek feladatok</h3>
+                            <p>Kezdj el hozzáadni teendőket!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Shopping Item Modal -->
+    <div class="modal hidden" id="shoppingModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="shoppingModalTitle">Termék hozzáadása</h3>
+                <button class="modal-close" id="closeShoppingModal">&times;</button>
+            </div>
+            <form id="shoppingForm">
+                <div class="form-group">
+                    <label class="form-label">Termék neve</label>
+                    <input type="text" class="form-control" id="shoppingName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mennyiség</label>
+                    <input type="text" class="form-control" id="shoppingQuantity" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kategória</label>
+                    <select class="form-control" id="shoppingCategory" required>
+                        <option value="Élelmiszer">Élelmiszer</option>
+                        <option value="Háztartás">Háztartás</option>
+                        <option value="Egyéb">Egyéb</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn--outline" id="cancelShopping">Mégse</button>
+                    <button type="submit" class="btn btn--primary">Mentés</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recipe Modal -->
+    <div class="modal hidden" id="recipeModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="recipeModalTitle">Recept hozzáadása</h3>
+                <button class="modal-close" id="closeRecipeModal">&times;</button>
+            </div>
+            <form id="recipeForm">
+                <div class="form-group">
+                    <label class="form-label">Recept neve</label>
+                    <input type="text" class="form-control" id="recipeName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kategória</label>
+                    <select class="form-control" id="recipeCategory" required>
+                        <option value="Előétel">Előétel</option>
+                        <option value="Főétel">Főétel</option>
+                        <option value="Desszert">Desszert</option>
+                        <option value="Ital">Ital</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Hozzávalók (soronként egy)</label>
+                    <textarea class="form-control" id="recipeIngredients" rows="6" required placeholder="500g spagetti&#10;300g darált hús&#10;1 db hagyma"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Elkészítés</label>
+                    <textarea class="form-control" id="recipeInstructions" rows="8" required placeholder="1. Főzd meg a tésztát&#10;2. Pirítsd meg a hagymát"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn--outline" id="cancelRecipe">Mégse</button>
+                    <button type="submit" class="btn btn--primary">Mentés</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recipe Detail Modal -->
+    <div class="modal hidden" id="recipeDetailModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="recipeDetailTitle"></h3>
+                <div class="modal-header-actions">
+                    <button class="btn btn--outline btn--sm" id="addIngredientsToShopping">+ Bevásárlólistára</button>
+                    <button class="btn btn--secondary btn--sm" id="editRecipeDetail">Szerkesztés</button>
+                    <button class="modal-close" id="closeRecipeDetail">&times;</button>
+                </div>
+            </div>
+            <div class="recipe-detail-content">
+                <div class="recipe-meta">
+                    <span class="status" id="recipeDetailCategory"></span>
+                    <button class="favorite-btn" id="toggleFavorite">
+                        <span class="favorite-icon">⭐</span>
+                    </button>
+                </div>
+                <div class="recipe-section">
+                    <h4>Hozzávalók</h4>
+                    <ul id="recipeDetailIngredients"></ul>
+                </div>
+                <div class="recipe-section">
+                    <h4>Elkészítés</h4>
+                    <div id="recipeDetailInstructions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Todo Modal -->
+    <div class="modal hidden" id="todoModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="todoModalTitle">Feladat hozzáadása</h3>
+                <button class="modal-close" id="closeTodoModal">&times;</button>
+            </div>
+            <form id="todoForm">
+                <div class="form-group">
+                    <label class="form-label">Feladat neve</label>
+                    <input type="text" class="form-control" id="todoName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kategória</label>
+                    <select class="form-control" id="todoCategory" required>
+                        <option value="Házimunka">Házimunka</option>
+                        <option value="Bevásárlás">Bevásárlás</option>
+                        <option value="Egyéb">Egyéb</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Prioritás</label>
+                    <select class="form-control" id="todoPriority" required>
+                        <option value="Alacsony">Alacsony</option>
+                        <option value="Közepes">Közepes</option>
+                        <option value="Magas">Magas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Határidő</label>
+                    <input type="date" class="form-control" id="todoDeadline" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn--outline" id="cancelTodo">Mégse</button>
+                    <button type="submit" class="btn btn--primary">Mentés</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast">
+        <div class="toast-content">
+            <span class="toast-message" id="toastMessage"></span>
+            <button class="toast-close" id="closeToast">&times;</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
